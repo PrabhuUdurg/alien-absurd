@@ -21,18 +21,20 @@ class AliensInvasion:
 
         while True:
             # Watch for keyboard and mouse events
-            self._check_events()
-            self._update_screen()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT: 
+                    sys.exit()
 
+            self._update_screen() 
 
-            
-            self.clock.tick(60)  # FPS
+            # FPS
     
     def _update_screen(self):
         # Update images on the screen, and flip to the new screen
             self.screen.fill(self.settings.bg_color)
             self.ship.blitme()
             pygame.display.flip()
+            self.clock.tick(60)
     
     def _check_events(self):
         # Respond to keypress and mouse events
