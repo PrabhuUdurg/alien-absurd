@@ -3,6 +3,7 @@ import pygame
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
+from ufos import Alien
 
 
 class AliensInvasion:
@@ -17,6 +18,10 @@ class AliensInvasion:
         pygame.display.set_caption("Aliens Absurd")
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
+        self.aliens = pygame.sprite.Group()
+        
+        self._create_fleet()
+        
 
 
     def run_game(self):
@@ -39,6 +44,7 @@ class AliensInvasion:
             for bullet in self.bullets.sprites():
                 bullet.draw_bullet()
             self.ship.blitme()
+            self.aliens.draw(self.screen)
             pygame.display.flip()
             
     
@@ -59,6 +65,7 @@ class AliensInvasion:
             self.ship.moving_right = False
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
+            
             
     def _check_keydown_events(self, event):
         # Respond to key presses
@@ -87,7 +94,29 @@ class AliensInvasion:
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
         # print(len(self.bullets))
-                        
+    
+    def _create_alien(self, x_postion, y_position):
+        new_alien = Alien(self)
+        new_alien.x = x_postion
+        new_alien.rect.x = x_postion
+        new_alien.rect.y = y_position
+        self.aliens.add(new_alien)
+        
+        
+    def _create_fleet(self):
+        alien = Alien(self)
+        self.aliens.add(alien)
+        alien_width, alien_height = alien.rect.size
+        
+        
+        current_x, current_y = alien_width, alien_height
+        while current_y < self.settings.screen_height - 4 * alien_height:
+            while current_x < self.settings.screen_width - alien_width:
+                self._create_alien(current_x, current_y)
+                current_x += alien_width * 2
+            current_y += alien_height * 2
+            current_x = alien_width
+             
 if __name__ == '__main__':
     # Making a game instant and run the game
     ai = AliensInvasion()
