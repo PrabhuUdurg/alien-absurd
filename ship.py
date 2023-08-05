@@ -19,10 +19,13 @@ class Ship:
         self.rect.midbottom = self.screen_rect.midbottom
        
        #Store a decimal value for the ship's horizontal position.
+        self.y = float(self.rect.y)
         self.x = float(self.rect.x)
        
         self.moving_right = False
         self.moving_left = False 
+        self.moving_down = False 
+        self.moving_up = False 
         
         
     def blitme(self): 
@@ -38,8 +41,17 @@ class Ship:
             self.x -= self.settings.ship_speed
             self.rect.x -= 1
             
+        if self.moving_down and self .rect.bottom < self.screen_rect.bottom:
+            self.y -= self.settings.ship_speed
+            self.rect.y -= 1
+            
+        if self.moving_up and self .rect.top < self.screen_rect.top:
+            self.y += self.settings.ship_speed
+            self.rect.y += 1
+            
         # Update rect object from self.x
         self.rect.x = self.x
+        self.rect.y = self.y
             
             
     def center_ship(self):
