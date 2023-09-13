@@ -7,7 +7,7 @@ from ufos import Alien
 from time import sleep
 from game_stats import GameStats
 from button import Button
-
+from scoreboard import Scoreboard
 
 
 class AliensInvasion:
@@ -21,17 +21,20 @@ class AliensInvasion:
             (self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Aliens Absurd")
         
+        
         self.stats = GameStats(self)
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
-        
+        self.sb = Scoreboard(self)
         self._create_fleet()
         
         self.game_active = False
         
         # Play button 
         self.play_button = Button(self, "Play")
+        
+        
 
 
     def run_game(self):
@@ -58,6 +61,7 @@ class AliensInvasion:
                 bullet.draw_bullet()
             self.ship.blitme()
             self.aliens.draw(self.screen)
+            self.sb.show_score()
             
             # Draw the button if the game inactive 
             if not self.game_active:
@@ -92,6 +96,7 @@ class AliensInvasion:
             self._create_fleet()
             self.ship.center_ship()
             
+            self.settings.initialize_dynamic_settings()
             
             
             
@@ -170,6 +175,7 @@ class AliensInvasion:
         if not self.aliens:
             self.bullets.empty()
             self._create_fleet
+            self.settings.increase_speed()
         
     
     def _update_aliens(self):
